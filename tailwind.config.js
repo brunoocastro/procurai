@@ -12,10 +12,10 @@ module.exports = {
         sans: ['JetBrains Mono', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        base: {
+        ui: {
           primary: '#FFB709',
-          background: '#1e293b',
-          backgroundDark: '#131B25',
+          background: '#131B25',
+          backgroundLight: '#1e293b',
           gray: '#131C25',
           yellow: {
             100: '#FFEDC2',
@@ -31,11 +31,6 @@ module.exports = {
           blue: {
             700: '#1E293B'
           }
-        },
-        metal: {
-          gold: '#FFD700',
-          iron: '#C0C0C0',
-          bronze: '#9c5221'
         },
       }
     }
