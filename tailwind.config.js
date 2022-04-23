@@ -7,10 +7,9 @@ module.exports = {
   ],
   plugins: [],
   theme: {
-    
     extend: {
       fontFamily: {
-        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        sans: ['JetBrains Mono', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         base: {
