@@ -11,7 +11,8 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const handleSubmit = useCallback((rawCode: string) => {
-    const encodedCode = encodeURIComponent(rawCode);
+    const cleanedCode = rawCode.trim()
+    const encodedCode = encodeURIComponent(cleanedCode);
     console.log(rawCode, encodedCode)
     router.push(`/${encodedCode}`);
   }, [router]);
@@ -20,28 +21,28 @@ const Home: NextPage = () => {
     <div className="flex items-center justify-center h-screen w-screen">
       <Head>
         <title>Procurai</title>
-        <meta name="description" content="Rastreie sua encomenda!" />
+        <meta name="description" content="Rastreie sua encomenda da forma mais fácil possível!" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <h1 className="absolute top-1/3 text-6xl font-extrabold mb-2">
         Procurai
       </h1>
-        <form onSubmit={() => handleSubmit(code)}>
-      <div className="flex flex-col gap-5 w-[28rem] justify-center items-center ">
-          <div className="relative flex items-center justify-center w-[20rem] border-b-2 border-ui-primary">
-            <input
-              className="outline-none w-full text-center py-1 px-2 bg-transparent placeholder:text-white "
-              placeholder="Digite um código de rastreio"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-          </div>
-          <button type="submit" className="" onClick={() => handleSubmit(code)}>
-            Procurar
-          </button>
-      </div>
-        </form>
+      <form onSubmit={() => handleSubmit(code)}>
+        <div className="flex flex-col gap-5 w-[28rem] justify-center items-center ">
+            <div className="relative flex items-center justify-center w-[20rem] border-b-2 border-ui-primary">
+              <input
+                className="outline-none w-full text-center py-1 px-2 bg-transparent placeholder:text-white "
+                placeholder="Digite um código de rastreio"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="" onClick={() => handleSubmit(code)}>
+              Procurar
+            </button>
+        </div>
+      </form>
     </div>
   );
 };
