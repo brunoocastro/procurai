@@ -10,6 +10,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=inter:wght@300;400;700&display=swap"
             rel="stylesheet"
           />
+
         </Head>
 
         <body className="bg-ui-black placeholder:text-ui-white text-14 text-ui-white leading-4 relative h-screen w-screen overflow-hidden">

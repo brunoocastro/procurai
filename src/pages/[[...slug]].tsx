@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import CodeHistory from "../components/codeHistory";
 import Footer from "../components/footer";
@@ -9,7 +9,10 @@ import SearchAndSee from "../components/searchAndSee";
 
 const Code: NextPage = () => {
   const router = useRouter();
-  const { code } = router.query;
+  const code = useMemo(
+    () => (router?.query?.slug && router?.query?.slug[0]) ?? "",
+    [router.query]
+  );
 
   return (
     <div className="flex relative items-start justify-center h-screen w-screen">
@@ -22,7 +25,7 @@ const Code: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex justify-evenly  w-full h-full pt-[16.375rem]">
-        <SearchAndSee code={code?.toString() ?? ''} />
+        <SearchAndSee code={code?.toString() ?? ""} />
         <CodeHistory />
       </div>
 
