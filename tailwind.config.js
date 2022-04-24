@@ -11,26 +11,23 @@ module.exports = {
       fontFamily: {
         sans: ['JetBrains Mono', ...defaultTheme.fontFamily.sans],
       },
+      fontSize: {
+        32: ['32px', '40px'],
+        20: ['20px', '24px'],
+        16: ['16px', '20px'],
+        14: ['14px', '17px'],
+        12: ['12px', '14px'],
+      },
       colors: {
         ui: {
-          primary: '#FFB709',
-          background: '#131B25',
-          backgroundLight: '#1e293b',
-          white: '#FBFBFB',
-          black: '#0B0A0A',
-          gray: '#131C25',
-          yellow: {
-            100: '#FFEDC2',
-            400: '#FFDA80',
-            700: '#FFB709'
-          },
-          brown: {
-            400: '#805C04',
-            700: '#332502'
-          },
-          blue: {
-            700: '#1E293B'
-          }
+          black: '#131313',
+          white: '#FFFFFF',
+          blue: '#9BC3FF',
+          gray: '#696969',
+          grayLight: '#C2C2C2',
+          green: '#5BE291',
+          red: '#FF6A6A',
+          yellow: '#FFCC62'
         },
       }
     }
