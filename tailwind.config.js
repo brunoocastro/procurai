@@ -16,14 +16,14 @@ module.exports = {
           primary: '#FFB709',
           background: '#131B25',
           backgroundLight: '#1e293b',
+          white: '#FBFBFB',
+          black: '#0B0A0A',
           gray: '#131C25',
           yellow: {
             100: '#FFEDC2',
             400: '#FFDA80',
             700: '#FFB709'
           },
-          white: '#FBFBFB',
-          black: '#0B0A0A',
           brown: {
             400: '#805C04',
             700: '#332502'

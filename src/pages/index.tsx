@@ -35,7 +35,7 @@ const Home: NextPage = () => {
                 className="outline-none w-full text-center py-1 px-2 bg-transparent placeholder:text-white "
                 placeholder="Digite um código de rastreio"
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => setCode(e.target.value.toUpperCase())}
               />
             </div>
             <button type="submit" className="" onClick={() => handleSubmit(code)}>
