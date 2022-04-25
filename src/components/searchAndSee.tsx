@@ -14,6 +14,7 @@ import useDebounce from "../utils/useDebounce";
 import { PossibleStatus } from "./codeHistory";
 import { DateTime } from "luxon";
 import { IconType } from "react-icons";
+import UIColors from "../constants/UIColors";
 
 interface ITrackingState {
   time: string;
@@ -26,25 +27,25 @@ const possibleStatusProps: {
   [key: string]: { color: string; text: string; label: string; Icon: IconType };
 } = {
   POSTED: {
-    color: "ui-grayLight",
+    color: UIColors.grayLight,
     text: "Objeto postado",
     label: "Postado",
     Icon: () => <FaCubes size={16} />,
   },
   ONTHEWAY: {
-    color: "ui-yellow",
+    color: UIColors.yellow,
     text: "Objeto em trânsito",
     label: "Em trânsito",
     Icon: FaTruck,
   },
   ARRIVED: {
-    color: "ui-green",
+    color: UIColors.green,
     text: "Entregue no endereço",
     label: "Entregue",
     Icon: FaCheck,
   },
   CANCELLED: {
-    color: "ui-red",
+    color: UIColors.red,
     text: "Entrega Cancelada",
     label: "Cancelado",
     Icon: () => <FaTimes size={24} />,
@@ -59,6 +60,7 @@ const StatusLabel = ({ status }: { status: PossibleStatus }) => {
       className={`h-6 w-auto border rounded  px-2 py-1 flex justify-center items-center ${
         "border-" + color
       } ${"text-" + color}`}
+      style={{ borderColor: color, color: color }}
     >
       <p>{label}</p>
     </div>
@@ -69,14 +71,14 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
   const [trackingList, setTrackingList] = useState<ITrackingState[]>([
     {
       from: "",
-      to: "",
-      status: "CANCELLED",
+      to: "Rosário do Sul, RS",
+      status: "ARRIVED",
       time: "2022-04-25T01:02:41.932Z",
     },
     {
       from: "",
-      to: "Rosário do Sul, RS",
-      status: "ARRIVED",
+      to: "",
+      status: "CANCELLED",
       time: "2022-04-25T01:02:41.932Z",
     },
     {
@@ -99,9 +101,9 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
     <div
       className={`${
         open ? "flex flex-col h-0 opacity-100" : "hidden h-auto opacity-0"
-      } mt-20 transition-all ease-in-out`}
+      } mt-20 transition-all ease-in-out w-auto`}
     >
-      <header className="flex gap-32 mb-6 items-center  border-b border-ui-gray pb-3">
+      <header className="flex gap-32 w-auto mb-6 items-center text-ui-blue border-b border-ui-gray pb-3">
         <p>Data / Hora</p>
         <div className="flex pl-1 items-center justify-center gap-2">
           <p>Status:</p>
@@ -113,7 +115,7 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
           const { Icon, text } = possibleStatusProps[status];
           return (
             <div key={"track-" + index} className="flex">
-              <div className="pr-[54px] h-11">
+              <div className="w-52 h-11">
                 {DateTime.fromISO(time).toFormat("dd/mm/2021, HH:MM")}
               </div>
               <div className="flex flex-col items-center gap-2 w-5">
@@ -122,7 +124,7 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
                   <div className="h-full w-[2px] bg-ui-white" />
                 )}
               </div>
-              <div className="flex flex-row gap-2 pl-2">
+              <div className="flex flex-row gap-2 pl-2 overflow-auto">
                 {text} {(from || to) && "("}
                 {from && from}
                 {from && to && <FaArrowRight />}
