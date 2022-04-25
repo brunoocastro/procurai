@@ -9,14 +9,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["JetBrains Mono", ...defaultTheme.fontFamily.sans],
+        sans: ["Inter", ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
         32: ["32px", "40px"],
         20: ["20px", "24px"],
         16: ["16px", "20px"],
         14: ["14px", "17px"],
-        12: ["12px", "14px"],
+        12: ["12px", "15px"],
+        10: ["10px", "13px"],
       },
       colors: {
         ui: {

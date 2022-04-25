@@ -103,19 +103,19 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
         open ? "flex flex-col h-0 opacity-100" : "hidden h-auto opacity-0"
       } mt-20 transition-all ease-in-out w-auto`}
     >
-      <header className="flex gap-32 w-auto mb-6 items-center text-ui-blue border-b border-ui-gray pb-3">
+      <header className="flex gap-32 text-14 w-auto mb-6 items-center text-ui-blue border-b border-ui-gray pb-3">
         <p>Data / Hora</p>
         <div className="flex pl-1 items-center justify-center gap-2">
           <p>Status:</p>
           <StatusLabel status={actualState} />
         </div>
       </header>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 text-12">
         {trackingList.map(({ from, status, time, to }, index) => {
           const { Icon, text } = possibleStatusProps[status];
           return (
             <div key={"track-" + index} className="flex">
-              <div className="w-52 h-11">
+              <div className="w-52 h-14">
                 {DateTime.fromISO(time).toFormat("dd/mm/2021, HH:MM")}
               </div>
               <div className="flex flex-col items-center gap-2 w-5">
@@ -124,12 +124,13 @@ const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
                   <div className="h-full w-[2px] bg-ui-white" />
                 )}
               </div>
-              <div className="flex flex-row gap-2 pl-2 overflow-auto">
+              <div className="flex flex-row gap-2 pl-2 overflow-auto relative">
                 {text} {(from || to) && "("}
                 {from && from}
                 {from && to && <FaArrowRight />}
                 {to && to}
                 {(from || to) && ")"}
+                {index === 0 && <p className="text-10 absolute top-6 left-2">Última atualização</p>}
               </div>
             </div>
           );
