@@ -24,7 +24,7 @@ const Code: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex justify-evenly  w-full h-full pt-[16.375rem]">
+      <div className="flex justify-evenly w-full h-full">
         <SearchAndSee code={code?.toString() ?? ""} />
         <CodeHistory />
       </div>

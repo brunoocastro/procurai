@@ -2,14 +2,8 @@ import { useState } from "react";
 
 import { DateTime } from "luxon";
 
-export type PossibleStatus = "POSTED" | "ONTHEWAY" | "ARRIVED";
+export type PossibleStatus = "POSTED" | "ONTHEWAY" | "ARRIVED" | "CANCELLED";
 
-interface ITrackingState {
-  time: string;
-  from: string;
-  to: string;
-  status: PossibleStatus;
-}
 interface IHistoryState {
   code: string;
   time: string;
@@ -66,7 +60,7 @@ const CodeHistory = () => {
     },
   ]);
   return (
-    <div className="w-auto">
+    <div className="w-auto pt-[16.375rem]">
       <div className="text-16 font-bold pb-2 border-b border-ui-blue mb-9">
         <p>Suas últimas encomendas:</p>
       </div>

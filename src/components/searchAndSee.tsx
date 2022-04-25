@@ -1,34 +1,206 @@
+import axios from "axios";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { useEffect, useMemo, useState } from "react";
+import {
+  FaCubes,
+  FaSearch,
+  FaTruck,
+  FaCheck,
+  FaTimes,
+  FaArrowRight,
+} from "react-icons/fa";
+import { AiOutlineReload } from "react-icons/ai";
+import useDebounce from "../utils/useDebounce";
+import { PossibleStatus } from "./codeHistory";
+import { DateTime } from "luxon";
+import { IconType } from "react-icons";
+
+interface ITrackingState {
+  time: string;
+  from: string;
+  to: string;
+  status: PossibleStatus;
+}
+
+const possibleStatusProps: {
+  [key: string]: { color: string; text: string; label: string; Icon: IconType };
+} = {
+  POSTED: {
+    color: "ui-grayLight",
+    text: "Objeto postado",
+    label: "Postado",
+    Icon: () => <FaCubes size={16} />,
+  },
+  ONTHEWAY: {
+    color: "ui-yellow",
+    text: "Objeto em trânsito",
+    label: "Em trânsito",
+    Icon: FaTruck,
+  },
+  ARRIVED: {
+    color: "ui-green",
+    text: "Entregue no endereço",
+    label: "Entregue",
+    Icon: FaCheck,
+  },
+  CANCELLED: {
+    color: "ui-red",
+    text: "Entrega Cancelada",
+    label: "Cancelado",
+    Icon: () => <FaTimes size={24} />,
+  },
+};
+
+const StatusLabel = ({ status }: { status: PossibleStatus }) => {
+  const { color, label } = useMemo(() => possibleStatusProps[status], [status]);
+
+  return status ? (
+    <div
+      className={`h-6 w-auto border rounded  px-2 py-1 flex justify-center items-center ${
+        "border-" + color
+      } ${"text-" + color}`}
+    >
+      <p>{label}</p>
+    </div>
+  ) : null;
+};
+
+const HistoryComponent = ({ code, open }: { code: string; open: boolean }) => {
+  const [trackingList, setTrackingList] = useState<ITrackingState[]>([
+    {
+      from: "",
+      to: "",
+      status: "CANCELLED",
+      time: "2022-04-25T01:02:41.932Z",
+    },
+    {
+      from: "",
+      to: "Rosário do Sul, RS",
+      status: "ARRIVED",
+      time: "2022-04-25T01:02:41.932Z",
+    },
+    {
+      from: "Santa Maria, RS",
+      to: "Rosário do Sul, RS",
+      status: "ONTHEWAY",
+      time: "2022-04-25T01:02:41.932Z",
+    },
+    {
+      from: "São José do Vale do Rio Preto, RS",
+      to: "Rosário do Sul, RS",
+      status: "POSTED",
+      time: "2022-04-25T01:02:41.932Z",
+    },
+  ]);
+
+  const actualState = useMemo(() => trackingList[0].status, [trackingList]);
+
+  return (
+    <div
+      className={`${
+        open ? "flex flex-col h-0 opacity-100" : "hidden h-auto opacity-0"
+      } mt-20 transition-all ease-in-out`}
+    >
+      <header className="flex gap-32 mb-6 items-center  border-b border-ui-gray pb-3">
+        <p>Data / Hora</p>
+        <div className="flex pl-1 items-center justify-center gap-2">
+          <p>Status:</p>
+          <StatusLabel status={actualState} />
+        </div>
+      </header>
+      <div className="flex flex-col gap-2">
+        {trackingList.map(({ from, status, time, to }, index) => {
+          const { Icon, text } = possibleStatusProps[status];
+          return (
+            <div key={"track-" + index} className="flex">
+              <div className="pr-[54px] h-11">
+                {DateTime.fromISO(time).toFormat("dd/mm/2021, HH:MM")}
+              </div>
+              <div className="flex flex-col items-center gap-2 w-5">
+                <Icon size={20} />
+                {index !== trackingList.length - 1 && (
+                  <div className="h-full w-[2px] bg-ui-white" />
+                )}
+              </div>
+              <div className="flex flex-row gap-2 pl-2">
+                {text} {(from || to) && "("}
+                {from && from}
+                {from && to && <FaArrowRight />}
+                {to && to}
+                {(from || to) && ")"}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 const SearchAndSee = ({ code }: { code: string }) => {
   const router = useRouter();
 
   const [localCode, setLocalCode] = useState(code ?? "");
+  const [loading, setLoading] = useState(false);
+
+  const debouncedCode = useDebounce(localCode, 1300);
+  const historyOpen = useMemo(() => debouncedCode !== "", [debouncedCode]);
+
+  const handleSearchCode = async (code: string) => {
+    console.log("debouncedCode", code);
+    if (!code) return;
+    setLoading(true);
+    try {
+      const request = await axios.get(
+        `https://southamerica-east1-procurai.cloudfunctions.net/searchCode?code=${code}`
+      );
+      console.log("Request Success", request.data);
+    } catch (error) {
+      console.error("Erro", error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    handleSearchCode(debouncedCode);
+  }, [debouncedCode]);
 
   useEffect(() => {
     code !== localCode && setLocalCode(code);
   }, [code, localCode]);
 
   return (
-    <div>
-      <h1 className="text-32 font-bold mb-[10px]">- Procuraí</h1>
-      <h2 className="text-20 text-ui-blue">Rastreador de encomendas</h2>
-      <div className="relative flex items-center justify-center mt-16 w-[24.188rem] pb-[10px] border-b-2 border-ui-primary">
-        <input
-          className="outline-none w-full text-left bg-transparent placeholder:text-ui-grayLight "
-          placeholder="Digite um código de rastreio"
-          value={localCode}
-          onChange={(e) => {
-            router.push(`/${e.target.value.toUpperCase()}`, undefined, {
-              shallow: true,
-            });
-            setLocalCode(e.target.value.toUpperCase());
-          }}
-        />
-        <FaSearch className="mx-2 cursor-pointer" />
+    <div className={`transition-all ease-in duration-300 w-[50%]`}>
+      <div
+        className={`${
+          historyOpen ? "-translate-y-44" : "translate-0"
+        } pt-64 transition-all ease-linear `}
+      >
+        <h1 className="text-32 font-bold mb-[10px]">- Procuraí</h1>
+        <h2 className="text-20 text-ui-blue">Rastreador de encomendas</h2>
+        <div className="relative flex items-center justify-center mt-16 w-[24.188rem] pb-[10px] border-b-2 border-ui-primary">
+          <input
+            className="outline-none w-full text-left bg-transparent placeholder:text-ui-grayLight "
+            placeholder="Digite um código de rastreio"
+            value={localCode}
+            onChange={(e) => {
+              router.push(`/${e.target.value.toUpperCase()}`, undefined, {
+                shallow: true,
+              });
+              setLocalCode(e.target.value.toUpperCase());
+            }}
+          />
+          {loading ? (
+            <AiOutlineReload className="mx-2 cursor-pointer animate-spin" />
+          ) : (
+            <FaSearch
+              onClick={() => handleSearchCode(debouncedCode)}
+              className="mx-2 cursor-pointer"
+            />
+          )}
+        </div>
       </div>
+      <HistoryComponent code={debouncedCode} open={historyOpen} />
     </div>
   );
 };
