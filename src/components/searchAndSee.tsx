@@ -151,7 +151,7 @@ const SearchAndSee = ({ code }: { code: string }) => {
   const historyOpen = useMemo(() => debouncedCode !== "", [debouncedCode]);
 
   const handleSearchCode = async (searchCode: string) => {
-    const code = searchCode.trim()
+    const code = searchCode.replaceAll(' ', '')
     console.log("debouncedCode", code);
     if (!code) return;
     if (!(/^[A-Z]{2}[0-9]{9}[A-Z]{2}$/.test(code))) {
