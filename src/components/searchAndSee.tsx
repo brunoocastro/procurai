@@ -150,11 +150,12 @@ const SearchAndSee = ({ code }: { code: string }) => {
   const debouncedCode = useDebounce(localCode, 1300);
   const historyOpen = useMemo(() => debouncedCode !== "", [debouncedCode]);
 
-  const handleSearchCode = async (code: string) => {
+  const handleSearchCode = async (searchCode: string) => {
+    const code = searchCode.trim()
     console.log("debouncedCode", code);
     if (!code) return;
     if (!(/^[A-Z]{2}[0-9]{9}[A-Z]{2}$/.test(code))) {
-      toast.error("Formato de código inválido!")
+      toast.error("Formato de código inválido!",{icon: <FaTimes/>, className: 'bg-ui-red'})
       return
     }
     setLoading(true);
