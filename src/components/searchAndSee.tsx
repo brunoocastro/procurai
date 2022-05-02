@@ -15,6 +15,7 @@ import { PossibleStatus } from "./codeHistory";
 import { DateTime } from "luxon";
 import { IconType } from "react-icons";
 import UIColors from "../constants/UIColors";
+import toast from "react-hot-toast";
 
 interface ITrackingState {
   time: string;
@@ -152,14 +153,18 @@ const SearchAndSee = ({ code }: { code: string }) => {
   const handleSearchCode = async (code: string) => {
     console.log("debouncedCode", code);
     if (!code) return;
+    if (!(/^[A-Z]{2}[0-9]{9}[A-Z]{2}$/.test(code))) {
+      toast.error("Formato de código inválido!")
+      return
+    }
     setLoading(true);
     try {
-      const request = await axios.get(
-        `https://southamerica-east1-procurai.cloudfunctions.net/searchCode?code=${code}`
+      const request = await axios.post(
+        `https://southamerica-east1-procurai.cloudfunctions.net/searchCode`, {code}
       );
       console.log("Request Success", request.data);
-    } catch (error) {
-      console.error("Erro", error);
+    } catch (error: any) {
+      console.error("Request Error", error?.response?.data);
     }
     setLoading(false);
   };
