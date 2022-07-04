@@ -28,7 +28,6 @@ const Code: NextPage = () => {
         <SearchAndSee code={code?.toString() ?? ""} />
         <CodeHistory />
       </div>
-
       <Footer />
     </div>
   );

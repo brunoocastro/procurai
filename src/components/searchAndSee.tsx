@@ -16,6 +16,7 @@ import { DateTime } from "luxon";
 import { IconType } from "react-icons";
 import UIColors from "../constants/UIColors";
 import toast from "react-hot-toast";
+import { searchCodeUrl } from "../constants/functionsLinks";
 
 interface ITrackingState {
   time: string;
@@ -161,7 +162,7 @@ const SearchAndSee = ({ code }: { code: string }) => {
     setLoading(true);
     try {
       const request = await axios.post(
-        `https://southamerica-east1-procurai.cloudfunctions.net/searchCode`, {code}
+        `${searchCodeUrl}/searchCode`, {code}
       );
       console.log("Request Success", request.data);
     } catch (error: any) {
